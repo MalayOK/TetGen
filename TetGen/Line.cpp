@@ -41,6 +41,11 @@ namespace TetGen
 			IsAlmostEqualDouble(cross.GetVector().GetZ(), 0);
 	}
 
+	Line Line::GetLine()const
+	{
+		return *this;
+	}
+
 	bool Line::IsPointInLine(const Point3d& rPoint)
 	{
 		double x0 = rPoint.GetX();
@@ -57,7 +62,35 @@ namespace TetGen
 			IsAlmostEqualDouble((y0 - y1) * z2, (z0 - z1) * y2);
 		return flag;
 	}
+	/*bool Line::IsLineIntersectedTriangles(std::list<std::shared_ptr<Triangle>>& rListOfTriangles)
+	{ 
+		
+		Point3d tempPoint;
+		for (std::list<std::shared_ptr<Triangle>>::iterator
+			it = rListOfTriangles.begin(); it != rListOfTriangles.end(); ++it)
+		{
+			if (it->get()->IsIntersectedLineTriangle(*this, tempPoint))
+			{
+				this->mpListOfIntersectionPoints.push_back(std::make_shared<Point3d>(tempPoint));
+			}
+		}
+		if (mpListOfIntersectionPoints.size() > 0)
+		{ 
+			mIsIntersectedObject = true;
+			return true;
+		}
+			return true;
+		return false;
+	}*/
 
+	void Line::DeleteRepeatingPoints()
+	{
+		mpListOfIntersectionPoints.sort();
+		mpListOfIntersectionPoints.erase(
+			std::unique(mpListOfIntersectionPoints.begin(),
+				mpListOfIntersectionPoints.end()),
+			mpListOfIntersectionPoints.end());
+	}
 	Point3d Line::GetStartPoint()const
 	{
 		return this->mpStartPoint->GetPoint();

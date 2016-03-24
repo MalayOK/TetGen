@@ -3,8 +3,10 @@
 
 namespace TetGen
 {
-	Stl::Stl(char* name) : mName(name)
-	{}
+	Stl::Stl(char* name)/* : mName(name)*/
+	{
+		mName = name;
+	}
 
 	Stl::~Stl()
 	{}
@@ -24,17 +26,18 @@ namespace TetGen
 				readStl.open(name, ios::in);
 				mName = name;
 			}
+		}
 			char buffer[50]; 
 			readStl >> buffer;
 			bool isASCII = false;
-			if (strcmp(buffer,"solid"))
+			if (!strcmp(buffer,"solid"))
 			{
 				readStl.close();
 				ReadAsciiStl();
 			}
 			readStl.close();
 			ReadBinaryStl();
-		}
+		
 	}
 
 	//An ASCII STL file begins with the line
@@ -83,10 +86,10 @@ namespace TetGen
 					iterPoint[i - 1]--;
 				}
 				std::shared_ptr<Triangle> readedTriangle = std::make_shared<Triangle>
-					(*(iterPoint[0]),
-						*(iterPoint[1]),
-						*(iterPoint[2]),
-						*(iterPoint[3]));
+					(iterPoint[0]->get()->GetPoint(),
+						iterPoint[1]->get()->GetPoint(),
+						iterPoint[2]->get()->GetPoint(),
+						iterPoint[3]->get()->GetPoint());
 				mpStlTriangle.push_back(readedTriangle);
 				points.clear();
 			}
@@ -116,19 +119,41 @@ namespace TetGen
 		fread(&numberOfTriangles, sizeof(int), 1, file);
 		for (int i = 0; i < numberOfTriangles; i++)
 		{
+			float temp;
 			TempStl triangle ;
 			triangle.mpNormal.reserve(3);
 			triangle.mpFirst.reserve(3);
 			triangle.mpSecond.reserve(3);
 			triangle.mpThird.reserve(3);
+			/*for (int i = 0; i < 3; i++)
+			{
+				triangle.mpNormal[i] = std::make_shared<float>;
+				triangle.mpFirst.assign = std::make_shared<float>(0);
+				triangle.mpSecond.assign = std::make_shared<float>(0);
+				triangle.mpThird.assign = std::make_shared<float>(0);
+			}*/
 			for (int k = 0; k < 3; k++)
-				fread(&triangle.mpNormal[k], sizeof(float), 1, file);
+			{
+				fread(&temp, sizeof(float), 1, file);
+				triangle.mpNormal.push_back(std::make_shared<float>(temp));
+			}
 			for (int k = 0; k < 3; k++)
-				fread(&triangle.mpFirst[k], sizeof(float), 1, file);
+			{
+				fread(&temp, sizeof(float), 1, file);
+				triangle.mpFirst.push_back(std::make_shared<float>(temp));
+			}
 			for (int k = 0; k < 3; k++)
-				fread(&triangle.mpSecond[k], sizeof(float), 1, file);
+			{
+				fread(&temp, sizeof(float), 1, file);
+				triangle.mpSecond.push_back(std::make_shared<float>(temp));
+			}
+				
 			for (int k = 0; k < 3; k++)
-				fread(&triangle.mpThird[k], sizeof(float), 1, file);
+			{
+				fread(&temp, sizeof(float), 1, file);
+				triangle.mpThird.push_back(std::make_shared<float>(temp));
+			}
+				
 			fread(&triangle.mAttribute, sizeof(short int), 1, file);
 			list<std::shared_ptr<Point3d>> points;
 			list<std::shared_ptr<Point3d>>::iterator iterPoint[4];
@@ -152,7 +177,40 @@ namespace TetGen
 					iterPoint[3]->get()->GetPoint());
 			mpStlTriangle.push_back(readedTriangle);
 			points.clear();
+			triangle.mpNormal.clear();
+			triangle.mpFirst.clear();
+			triangle.mpSecond.clear();
+			triangle.mpThird.clear();
 		}
 		fclose(file);
+	}
+	///return minimal and maximal x y z 
+	///temp[0]-min x temp[1]-min y temp[2]-min z
+	///temp[3]-max x temp[4]-max y temp[5]-max z
+	double* Stl::GetMinMaxXYZ()const
+	{
+		std::list<std::shared_ptr<Triangle>>::const_iterator itList;
+		itList = mpStlTriangle.begin();
+		double temp[6];
+		temp[0] = itList->get()->GetMin()[0];
+		temp[1] = itList->get()->GetMin()[1];
+		temp[2] = itList->get()->GetMin()[2];
+		temp[3] = itList->get()->GetMax()[3];
+		temp[4] = itList->get()->GetMax()[4];
+		temp[5] = itList->get()->GetMax()[5];
+		for (itList; itList != mpStlTriangle.end(); itList++)
+		{
+			for (size_t i = 0; i<3; i++)
+			{
+				temp[i] = (temp[i] > itList->get()->GetMin()[i]) ?
+					itList->get()->GetMin()[i] : temp[i];
+			}
+			for (size_t j = 3; j<6; j++)
+			{
+				temp[j] = (temp[j] < itList->get()->GetMax()[j]) ?
+					itList->get()->GetMax()[j] : temp[j];
+			}
+		}
+		return temp;
 	}
 }

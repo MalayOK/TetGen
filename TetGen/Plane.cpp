@@ -15,11 +15,11 @@ namespace TetGen
 		SetABCD(rPoint1, rPoint2, rPoint3);
 	}
 
-	Plane::Plane(const Triangle& rTriangle)
-	{
-		SetABCD(rTriangle.GetPoints(0), rTriangle.GetPoints(1),
-			rTriangle.GetPoints(2));
-	}
+	//Plane::Plane(const Triangle& rTriangle)
+	//{
+	//	SetABCD(rTriangle.GetPoints(0), rTriangle.GetPoints(1),
+	//		rTriangle.GetPoints(2));
+	//}
 
 	Plane::~Plane()
 	{}
@@ -47,6 +47,30 @@ namespace TetGen
 			!IsAlmostEqualDouble(this->mD / rPlane.mD, this->mA / rPlane.mA))
 			return true;
 		return false;
+	}
+
+	bool Plane::IsLineIntersectedPlane(const Line& rLine, Point3d& rResultPoint)
+	{
+		Vector3d p(rLine.GetEndPoint() - rLine.GetStartPoint());
+		double dot = p*Vector3d(mA, mB, mC);
+	        //if the dot product of the direction vector
+		    //and the normal vector line is 0, 
+			//and hence the line or parallel to the plane 
+			//or line lies in the plane
+		if (IsAlmostEqualDouble(dot, 0))
+			return false;
+		double t = -(mA*rLine.GetStartPoint().GetX() +
+			mB*rLine.GetStartPoint().GetY() +
+			mC*rLine.GetStartPoint().GetZ() + mD) /
+			(mA*p.GetVector().GetX() + mB*p.GetVector().GetY() +
+				mC*p.GetVector().GetZ());
+		double x = rLine.GetStartPoint().GetX() + p.GetVector().GetX()*t;
+		double y = rLine.GetStartPoint().GetY() + p.GetVector().GetY()*t;
+		double z = rLine.GetStartPoint().GetZ() + p.GetVector().GetZ()*t;
+		rResultPoint.SetX(x);
+		rResultPoint.SetY(y);
+		rResultPoint.SetZ(z);
+		return true;
 	}
 
 	Plane& Plane::operator= (const Plane& rPlane)
