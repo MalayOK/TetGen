@@ -12,8 +12,10 @@ namespace TetGen
 			double GetX()const;
 			double GetY()const;
 			double GetZ()const;
+			bool GetIsInBody()const;
 			double GetDistance(const Point3d& rPoint)const;
 			Point3d GetPoint()const;
+			void SetIsInBody(bool flag);
 			void SetX(double X);
 			void SetY(double Y);
 			void SetZ(double Z);
@@ -22,10 +24,13 @@ namespace TetGen
 			Point3d operator=(const Point3d& rPoint);
 			bool operator==(const Point3d& rPoint);
 			bool operator!=(const Point3d& rPoint);
+			/*bool operator>=(const Point3d& rPoint);
+			bool operator<=(const Point3d& rPoint);*/
 		private:
 			double mX;
 			double mY;
 			double mZ;
+			bool mIsInBody;
 	
 	};
 

@@ -7,9 +7,10 @@ namespace TetGen
 		mX = 0;
 		mY = 0;
 		mZ = 0;
+		mIsInBody = false;
 	}
 
-	Point3d::Point3d(double X, double Y, double Z) :mX(X), mY(Y), mZ(Z)
+	Point3d::Point3d(double X, double Y, double Z) :mX(X), mY(Y), mZ(Z),mIsInBody(false)
 	{
 	}
 
@@ -43,6 +44,11 @@ namespace TetGen
 		return Distance;
 	}
 
+	bool Point3d::GetIsInBody()const
+	{
+		return mIsInBody;
+	}
+
 	void Point3d::SetX(double X)
 	{
 		mX = X;
@@ -55,6 +61,11 @@ namespace TetGen
 	void Point3d::SetZ(double Z)
 	{
 		mZ = Z;
+	}
+
+	void Point3d::SetIsInBody(bool flag)
+	{
+		this->mIsInBody = flag;
 	}
 
 	Point3d Point3d::operator+(const Point3d& rPoint)const
@@ -80,6 +91,7 @@ namespace TetGen
 		this->SetX(rPoint.GetX());
 		this->SetY(rPoint.GetY());
 		this->SetZ(rPoint.GetZ());
+		this->mIsInBody = rPoint.mIsInBody;
 	return *this;
 	}
 
@@ -96,4 +108,26 @@ namespace TetGen
 	{
 		return !(*this == rPoint);
 	}
+
+	//bool Point3d::operator>=(const Point3d& rPoint)
+	//{
+	//	if (this->GetPoint() == rPoint)
+	//		return true;
+	//	if (this->GetX() > rPoint.GetX()&&
+	//		this->GetY() > rPoint.GetY() && 
+	//		this->GetZ() > rPoint.GetZ() )
+	//		return true;
+	//	return false;
+
+	//}
+	//bool Point3d::operator<=(const Point3d& rPoint)
+	//{
+	//	if (this->GetPoint() == rPoint)
+	//		return true;
+	//	if (this->GetX() < rPoint.GetX() &&
+	//		this->GetY() < rPoint.GetY() &&
+	//		this->GetZ() < rPoint.GetZ())
+	//		return true;
+	//	return false;
+	//}
 }

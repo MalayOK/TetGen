@@ -3,8 +3,8 @@
 #include "Point3d.h"
 #include "Mathematic.h"
 #include "Vector3d.h"
-#include "Triangle.h"
-#include "Plane.h"
+//#include "Triangle.h"
+
 namespace TetGen
 {
 	class Line
@@ -23,11 +23,13 @@ namespace TetGen
 		//bool IsEqualTwoLines(const Line& rLine1, const Line& rLine2);
 		bool Intersection(Line& rLine,Point3d& rPoint);
 		bool IsPointInLine(const Point3d& rPoint);
-		//bool IsLineIntersectedTriangles(std::list<std::shared_ptr<Triangle>>& rListOfTriangles);
+		bool IsPointInLineSegment(const Point3d& rPoint);
+		void SetPointOfIntersection(const std::vector< std::shared_ptr<Point3d> >& rListOfPoints);
+		std::vector<std::shared_ptr<Point3d>> GetIntersectionPoints()const;
 	private:
 		std::shared_ptr<Point3d> mpStartPoint;
 		std::shared_ptr<Point3d> mpEndPoint;
-		std::list<std::shared_ptr<Point3d>> mpListOfIntersectionPoints;
+		std::vector<std::shared_ptr<Point3d>> mpIntersectionPoints;
 		bool mIsIntersectedObject;
 	};
 }

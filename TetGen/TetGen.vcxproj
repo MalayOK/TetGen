@@ -137,6 +137,7 @@
     <ClCompile Include="Mathematic.cpp" />
     <ClCompile Include="Plane.cpp" />
     <ClCompile Include="Point3d.cpp" />
+    <ClCompile Include="Processing.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>

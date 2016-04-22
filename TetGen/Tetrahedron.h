@@ -9,6 +9,7 @@ namespace TetGen
 	{
 	public:
 		Tetrahedron(Point3d&, Point3d&, Point3d&, Point3d&);
+		char* GenerateStlTetra();
 		/*Tetrahedron(Triangle&, Triangle&, Triangle&, Triangle&);*/
 		~Tetrahedron();
 	private:

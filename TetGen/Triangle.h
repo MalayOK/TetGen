@@ -1,7 +1,6 @@
 #pragma once
 #include "stdafx.h"
 #include "Point3d.h"
-#include "Line.h"
 #include "Mathematic.h"
 #include "Plane.h"
 
@@ -20,18 +19,20 @@ namespace TetGen
 		~Triangle();
 		double SquareOfTriangle();
 		Point3d GetPoints(int i)const;
+		bool IsIntersectedLT(const Line& rLine, Point3d& rResultPoint);
 		bool IsPointInTop(const Point3d&);
-		bool IsIntersectedLineTriangle(const Line& rLine, Point3d& rResultPoint);
-		bool IsPointInTiangle(const Point3d& rPoint)const;
-		double* GetMax();
-		double* GetMin();
+		bool IsPointInTiangle(const Point3d& rPoint);
+		char* GenerateStlTriangle();
+		std::vector<double> GetMax();
+		std::vector<double> GetMin();
 		bool operator==(const Triangle &);
 		bool operator!=(const Triangle &);
 		Triangle & operator=(const Triangle &);
+		bool IsINSameSide( Point3d&,  Point3d&,  Point3d&,  Point3d&);
 	private:
 		std::vector<std::shared_ptr<Point3d>> mpPoints;
 		std::shared_ptr<Point3d> mpNormal;
-		double mMax[gAmountOfCoordinates];
-		double mMin[gAmountOfCoordinates];
+		std::vector<double> mMax;
+		std::vector<double> mMin;
 	};
 }

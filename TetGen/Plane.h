@@ -1,8 +1,8 @@
 #pragma once
 #include "stdafx.h"
-#include "Point3d.h"
+//#include "Point3d.h"
 #include "Vector3d.h"
-#include "Triangle.h"
+//#include "Triangle.h"
 #include "Mathematic.h"
 #include "Line.h"
 
@@ -16,7 +16,7 @@ namespace TetGen
 		Plane(const Point3d& rPoint1, const Point3d& rPoint2,const Point3d& rPoint3);
 		/*Plane(const Triangle& rTriangle);*/
 		~Plane();
-		bool IsLineIntersectedPlane(const Line&,Point3d& );
+		bool IsLineIntersectedPlane(const Line& rLine,Point3d& rPoint);
 		void SetABCD(const Point3d& rPoint1, const Point3d& rPoint2,const Point3d& rPoint3);
 		bool IsParalelTwoPlanes(const Plane& rPlane);
 		Plane& operator= (const Plane& rPlane);
